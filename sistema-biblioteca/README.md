@@ -1,7 +1,9 @@
 # 📚 Sistema de Biblioteca
 
 Projeto Integrador — Análise e Desenvolvimento de Sistemas  
-**Aluno:** Hezron Daniel M C Canturil  
+**Alunos:** Hezron Daniel M C Canturil
+Leandro Caitano dos Santos
+Luilson Vieira Martins
 **Polo:** Sobradinho — BA
 
 ## Tecnologias
