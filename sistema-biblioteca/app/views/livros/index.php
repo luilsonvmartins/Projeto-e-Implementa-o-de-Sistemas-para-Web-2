@@ -3,13 +3,36 @@
         <h2>📖 Acervo de Livros</h2>
         <a href="<?= url('livro/criar') ?>" class="btn btn-primary">+ Novo Livro</a>
     </div>
-    <p style="color:#6b7280; font-style:italic;">Listagem será implementada na Entrega Parcial 3 (conexão com banco).</p>
+    <?php if (empty($livros)): ?>
+        <p style="text-align:center;color:#9ca3af;padding:2rem;">Nenhum livro cadastrado ainda. <a href="<?= url('livro/criar') ?>">Cadastrar primeiro livro</a></p>
+    <?php else: ?>
     <table>
         <thead>
-            <tr><th>Título</th><th>Autor</th><th>Categoria</th><th>Disponível</th><th>Ações</th></tr>
+            <tr><th>Capa</th><th>Título</th><th>Categoria</th><th>Disponível</th><th>Total</th><th>Ações</th></tr>
         </thead>
         <tbody>
-            <tr><td colspan="5" style="text-align:center; color:#9ca3af; padding:2rem;">Nenhum livro cadastrado ainda.</td></tr>
+        <?php foreach ($livros as $l): ?>
+            <tr>
+                <td>
+                    <?php if ($l['capa']): ?>
+                        <img src="<?= url('uploads/capas/' . e($l['capa'])) ?>" class="capa-thumb" alt="capa">
+                    <?php else: ?>
+                        <div class="capa-placeholder">📖</div>
+                    <?php endif; ?>
+                </td>
+                <td><strong><?= e($l['titulo']) ?></strong><?php if($l['isbn']): ?><br><small style="color:#9ca3af">ISBN: <?= e($l['isbn']) ?></small><?php endif; ?></td>
+                <td><?= e($l['categoria_nome'] ?? '—') ?></td>
+                <td><span class="badge <?= $l['qtd_disponivel'] > 0 ? 'badge-success' : 'badge-danger' ?>"><?= $l['qtd_disponivel'] ?></span></td>
+                <td><?= $l['qtd_total'] ?></td>
+                <td style="white-space:nowrap">
+                    <a href="<?= url('livro/show/'.$l['id']) ?>" class="btn btn-secondary btn-sm">👁 Ver</a>
+                    <a href="<?= url('livro/editar/'.$l['id']) ?>" class="btn btn-warning btn-sm">✏️ Editar</a>
+                    <a href="<?= url('livro/deletar/'.$l['id']) ?>" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Remover este livro?')">🗑 Remover</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
         </tbody>
     </table>
+    <?php endif; ?>
 </div>

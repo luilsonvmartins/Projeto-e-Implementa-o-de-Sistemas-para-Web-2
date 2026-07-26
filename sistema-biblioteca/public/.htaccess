@@ -1,4 +1,3 @@
-# Redireciona todas as requisições para index.php (exceto arquivos/pastas reais)
 Options -Indexes
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
