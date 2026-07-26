@@ -10,7 +10,7 @@ Projeto Integrador — Análise e Desenvolvimento de Sistemas
 ## Como rodar
 1. Extraia dentro de `C:\xampp\htdocs\sistema-biblioteca`
 2. Inicie Apache e MySQL no XAMPP
-3. Abra o phpMyAdmin e execute o arquivo `banco.sql`
+3. Abra o phpMyAdmin e execute o arquivo `database.sql`
 4. Acesse: `http://localhost/sistema-biblioteca/public`
 5. Login: `admin@biblioteca.com` / `admin123`
 
