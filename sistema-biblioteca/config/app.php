@@ -1,5 +1,5 @@
 <?php
-define('BASE_URL', 'http://localhost/ADS/PISWEB2/EP3/public');
+define('BASE_URL', 'http://localhost/sistema-biblioteca/public');
 define('APP_NAME', 'Sistema de Biblioteca');
 define('APP_VERSION', '1.0.0');
 define('APP_ENV', 'development');
