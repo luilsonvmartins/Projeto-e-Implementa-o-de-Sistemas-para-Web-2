@@ -5,7 +5,7 @@
 <div class="box">
     <h1>📚 <?= APP_NAME ?></h1>
     <p>Faça login para acessar o sistema</p>
-    <?php if ($msg = flash('erro')): ?><div class="alert">❌ <?= e($msg) ?></div><?php endif; ?>
+    <?php if ($msg = flash('erro')): ?><div class="alert"><?= e($msg) ?></div><?php endif; ?>
     <form method="POST" action="<?= url('auth/autenticar') ?>">
         <div class="fg"><label>E-mail</label><input type="email" name="email" required placeholder="admin@biblioteca.com"></div>
         <div class="fg"><label>Senha</label><input type="password" name="senha" required placeholder="••••••••"></div>

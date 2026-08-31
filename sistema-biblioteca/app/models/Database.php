@@ -12,9 +12,13 @@ class Database {
                     PDO::ATTR_EMULATE_PREPARES   => false,
                 ]);
             } catch (PDOException $e) {
+                error_log('Erro de conexão com o banco de dados: ' . $e->getMessage());
+                if (defined('APP_ENV') && APP_ENV === 'development') {
+                    die('<div style="font-family:sans-serif;padding:2rem;color:#991b1b;background:#fee2e2;border-left:4px solid #dc2626;margin:2rem">
+                        <strong>Erro de conexão:</strong><br>'.$e->getMessage().'<br><br>Verifique se o XAMPP está rodando e o banco "biblioteca" foi criado.</div>');
+                }
                 die('<div style="font-family:sans-serif;padding:2rem;color:#991b1b;background:#fee2e2;border-left:4px solid #dc2626;margin:2rem">
-                    <strong>Erro de conexão com o banco:</strong><br>' . $e->getMessage() .
-                    '<br><br>Verifique se o XAMPP está rodando e se o banco "biblioteca" foi criado.</div>');
+                    <strong>Erro no sistema.</strong><br>Não foi possível conectar ao banco de dados. Tente novamente mais tarde.</div>');
             }
         }
         return self::$instance;

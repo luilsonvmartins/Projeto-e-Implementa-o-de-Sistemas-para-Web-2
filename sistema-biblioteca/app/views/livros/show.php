@@ -3,6 +3,8 @@
         <h2>📖 <?= e($livro['titulo']) ?></h2>
         <div style="display:flex;gap:.5rem;">
             <a href="<?= url('livro/editar/'.$livro['id']) ?>" class="btn btn-warning btn-sm">✏️ Editar</a>
+            <button onclick="confirmarExclusao('<?= url('livro/deletar/'.$livro['id']) ?>','<?= e($livro['titulo']) ?>')"
+                class="btn btn-danger btn-sm">🗑 Remover</button>
             <a href="<?= url('livro/index') ?>" class="btn btn-secondary btn-sm">← Voltar</a>
         </div>
     </div>
@@ -16,12 +18,14 @@
         </div>
         <div style="flex:1;">
             <table style="font-size:.9rem;">
-                <tr><td style="font-weight:600;width:140px;padding:.4rem 0;">ISBN</td><td><?= e($livro['isbn'] ?? '—') ?></td></tr>
-                <tr><td style="font-weight:600;padding:.4rem 0;">Ano</td><td><?= e($livro['ano'] ?? '—') ?></td></tr>
-                <tr><td style="font-weight:600;padding:.4rem 0;">Categoria</td><td><?= e($livro['categoria_nome'] ?? '—') ?></td></tr>
-                <tr><td style="font-weight:600;padding:.4rem 0;">Autores</td><td><?= !empty($livro['autores']) ? e(implode(', ',$livro['autores'])) : '—' ?></td></tr>
-                <tr><td style="font-weight:600;padding:.4rem 0;">Disponíveis</td>
-                    <td><span class="badge <?= $livro['qtd_disponivel']>0?'badge-success':'badge-danger' ?>"><?= $livro['qtd_disponivel'] ?> / <?= $livro['qtd_total'] ?></span></td></tr>
+                <tr><td style="font-weight:600;width:130px;padding:.35rem 0;">ISBN</td><td><?= e($livro['isbn']??'—') ?></td></tr>
+                <tr><td style="font-weight:600;padding:.35rem 0;">Ano</td><td><?= e($livro['ano']??'—') ?></td></tr>
+                <tr><td style="font-weight:600;padding:.35rem 0;">Categoria</td><td><?= e($livro['categoria_nome']??'—') ?></td></tr>
+                <tr><td style="font-weight:600;padding:.35rem 0;">Autores</td>
+                    <td><?= !empty($livro['autores']) ? e(implode(', ', array_column($livro['autores'],'nome'))) : '—' ?></td></tr>
+                <tr><td style="font-weight:600;padding:.35rem 0;">Disponíveis</td>
+                    <td><span class="badge <?= $livro['qtd_disponivel']>0?'badge-success':'badge-danger' ?>">
+                        <?= $livro['qtd_disponivel'] ?> / <?= $livro['qtd_total'] ?></span></td></tr>
             </table>
             <?php if ($livro['sinopse']): ?>
                 <div style="margin-top:1rem;">

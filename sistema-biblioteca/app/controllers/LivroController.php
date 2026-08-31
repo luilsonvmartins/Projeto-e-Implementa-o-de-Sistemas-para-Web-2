@@ -1,114 +1,135 @@
 <?php
 class LivroController extends Controller {
 
-    public function index(?string $param = null): void {
+    public function index(?string $p = null): void {
         requireLogin();
-        $livro     = new Livro();
-        $livros    = $livro->todos();
-        $this->render('livros/index', ['titulo' => 'Acervo de Livros', 'livros' => $livros]);
+        $m = new Livro();
+        $this->render('livros/index', ['titulo'=>'Acervo de Livros','livros'=>$m->todos()]);
     }
 
-    public function criar(?string $param = null): void {
+    public function criar(?string $p = null): void {
         requireLogin();
-        $categoria  = new Categoria();
-        $autor      = new Autor();
         $this->render('livros/form', [
             'titulo'     => 'Cadastrar Livro',
             'livro'      => null,
-            'categorias' => $categoria->todos(),
-            'autores'    => $autor->todos(),
+            'erros'      => [],
+            'categorias' => (new Categoria())->todos(),
+            'autores'    => (new Autor())->todos(),
         ]);
     }
 
-    public function salvar(?string $param = null): void {
+    public function salvar(?string $p = null): void {
         requireLogin();
+        $m     = new Livro();
+        $erros = $m->validar($_POST);
 
-        // Validação básica
-        $erros = [];
-        if (empty($_POST['titulo']))    $erros[] = 'Título é obrigatório.';
-        if (empty($_POST['qtd_total'])) $erros[] = 'Quantidade é obrigatória.';
-
-        if ($erros) {
-            setFlash('erro', implode(' | ', $erros));
-            redirect('livro/criar');
-        }
-
-        // Upload de capa
+        // Validação do upload
         $capa = null;
         if (!empty($_FILES['capa']['name'])) {
             $ext   = strtolower(pathinfo($_FILES['capa']['name'], PATHINFO_EXTENSION));
             $allow = ['jpg','jpeg','png','gif','webp'];
-            if (!in_array($ext, $allow)) {
-                setFlash('erro', 'Formato de imagem inválido. Use JPG, PNG ou GIF.');
-                redirect('livro/criar');
-            }
-            $capa = uniqid('capa_') . '.' . $ext;
-            $dest = ROOT . '/public/uploads/capas/' . $capa;
-            if (!move_uploaded_file($_FILES['capa']['tmp_name'], $dest)) {
-                setFlash('erro', 'Falha ao fazer upload da capa.');
-                redirect('livro/criar');
+            if (!in_array($ext, $allow)) $erros[] = 'Formato de imagem inválido. Use JPG, PNG, GIF ou WebP.';
+            elseif ($_FILES['capa']['size'] > 2 * 1024 * 1024) $erros[] = 'Imagem deve ter no máximo 2MB.';
+            else {
+                $capa = uniqid('capa_') . '.' . $ext;
+                if (!move_uploaded_file($_FILES['capa']['tmp_name'], ROOT.'/public/uploads/capas/'.$capa)) {
+                    $erros[] = 'Falha ao fazer upload da capa.';
+                    $capa = null;
+                }
             }
         }
 
-        $livroModel = new Livro();
-        $ok = $livroModel->inserir([
-            'titulo'       => trim($_POST['titulo']),
-            'isbn'         => trim($_POST['isbn']         ?? ''),
-            'ano'          => trim($_POST['ano']          ?? ''),
-            'sinopse'      => trim($_POST['sinopse']      ?? ''),
-            'qtd_total'    => (int)$_POST['qtd_total'],
-            'id_categoria' => $_POST['id_categoria']      ?: null,
-            'capa'         => $capa,
-        ]);
-
-        if ($ok) {
-            $idLivro = $livroModel->ultimoId();
-            if (!empty($_POST['autores'])) {
-                $livroModel->vincularAutores($idLivro, $_POST['autores']);
-            }
-            setFlash('sucesso', 'Livro cadastrado com sucesso!');
-        } else {
-            setFlash('erro', 'Erro ao cadastrar livro. Tente novamente.');
+        if ($erros) {
+            $this->render('livros/form', [
+                'titulo'     => 'Cadastrar Livro',
+                'livro'      => $_POST,
+                'erros'      => $erros,
+                'categorias' => (new Categoria())->todos(),
+                'autores'    => (new Autor())->todos(),
+            ]);
+            return;
         }
+
+        $ok = $m->inserir(array_merge($_POST, ['capa' => $capa]));
+        if ($ok && !empty($_POST['autores'])) {
+            $m->vincularAutores($m->ultimoId(), $_POST['autores']);
+        }
+        setFlash($ok ? 'sucesso' : 'erro', $ok ? '✅ Livro cadastrado com sucesso!' : '❌ Erro ao cadastrar livro.');
         redirect('livro/index');
-    }
-
-    public function show(?string $id = null): void {
-        requireLogin();
-        $livroModel = new Livro();
-        $livro = $livroModel->porId((int)$id);
-        if (!$livro) { setFlash('erro','Livro não encontrado.'); redirect('livro/index'); }
-        $this->render('livros/show', ['titulo' => $livro['titulo'], 'livro' => $livro]);
     }
 
     public function editar(?string $id = null): void {
         requireLogin();
-        $livroModel = new Livro();
-        $livro = $livroModel->porId((int)$id);
+        $m     = new Livro();
+        $livro = $m->porId((int)$id);
         if (!$livro) { setFlash('erro','Livro não encontrado.'); redirect('livro/index'); }
-        $categoria = new Categoria(); $autor = new Autor();
         $this->render('livros/form', [
             'titulo'     => 'Editar Livro',
             'livro'      => $livro,
-            'categorias' => $categoria->todos(),
-            'autores'    => $autor->todos(),
+            'erros'      => [],
+            'categorias' => (new Categoria())->todos(),
+            'autores'    => (new Autor())->todos(),
         ]);
     }
 
-    public function atualizar(?string $param = null): void {
+    public function atualizar(?string $p = null): void {
         requireLogin();
-        if (empty($_POST['titulo'])) { setFlash('erro','Título obrigatório.'); redirect('livro/index'); }
-        $livroModel = new Livro();
-        $ok = $livroModel->atualizar((int)$_POST['id'], $_POST);
-        setFlash($ok ? 'sucesso' : 'erro', $ok ? 'Livro atualizado!' : 'Erro ao atualizar.');
+        $id    = (int)($_POST['id'] ?? 0);
+        $m     = new Livro();
+        $erros = $m->validar($_POST);
+
+        // Upload de nova capa (opcional)
+        $novaCapa = null;
+        if (!empty($_FILES['capa']['name'])) {
+            $ext   = strtolower(pathinfo($_FILES['capa']['name'], PATHINFO_EXTENSION));
+            $allow = ['jpg','jpeg','png','gif','webp'];
+            if (!in_array($ext, $allow)) $erros[] = 'Formato de imagem inválido.';
+            elseif ($_FILES['capa']['size'] > 2 * 1024 * 1024) $erros[] = 'Imagem deve ter no máximo 2MB.';
+            else {
+                $novaCapa = uniqid('capa_') . '.' . $ext;
+                if (!move_uploaded_file($_FILES['capa']['tmp_name'], ROOT.'/public/uploads/capas/'.$novaCapa)) {
+                    $erros[] = 'Falha ao fazer upload da capa.';
+                    $novaCapa = null;
+                }
+            }
+        }
+
+        if ($erros) {
+            $livro = array_merge($m->porId($id) ?? [], $_POST);
+            $this->render('livros/form', [
+                'titulo'     => 'Editar Livro',
+                'livro'      => $livro,
+                'erros'      => $erros,
+                'categorias' => (new Categoria())->todos(),
+                'autores'    => (new Autor())->todos(),
+            ]);
+            return;
+        }
+
+        $dados = $_POST;
+        if ($novaCapa) $dados['capa'] = $novaCapa;
+
+        $ok = $m->atualizar($id, $dados);
+        if ($ok && isset($_POST['autores'])) {
+            $m->vincularAutores($id, $_POST['autores']);
+        }
+        setFlash($ok ? 'sucesso' : 'erro', $ok ? '✅ Livro atualizado com sucesso!' : '❌ Erro ao atualizar livro.');
         redirect('livro/index');
     }
 
     public function deletar(?string $id = null): void {
         requireLogin();
-        $livroModel = new Livro();
-        $ok = $livroModel->deletar((int)$id);
-        setFlash($ok ? 'sucesso' : 'erro', $ok ? 'Livro removido!' : 'Erro ao remover.');
+        $m  = new Livro();
+        $ok = $m->deletar((int)$id);
+        setFlash($ok ? 'sucesso' : 'erro', $ok ? '✅ Livro removido com sucesso!' : '❌ Erro ao remover livro.');
         redirect('livro/index');
+    }
+
+    public function show(?string $id = null): void {
+        requireLogin();
+        $m     = new Livro();
+        $livro = $m->porId((int)$id);
+        if (!$livro) { setFlash('erro','Livro não encontrado.'); redirect('livro/index'); }
+        $this->render('livros/show', ['titulo'=>$livro['titulo'],'livro'=>$livro]);
     }
 }
