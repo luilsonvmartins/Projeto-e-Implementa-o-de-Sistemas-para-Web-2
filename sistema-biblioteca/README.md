@@ -9,7 +9,8 @@
 2. Inicie Apache e MySQL no XAMPP
 3. phpMyAdmin → aba SQL → cole `banco.sql` → Executar
 4. Acesse: `http://localhost/sistema-biblioteca/public`
-5. Login: qualquer dado (autenticação real na EP5)
+5. Login admin: `admin@biblioteca.com` / `admin123`
+6. Login leitor: `leitor@biblioteca.com` / `leitor123`
 
 ## Entregas
 | Entrega | Status |
@@ -18,5 +19,5 @@
 | EP2 — MVC e Rotas  | ✅ |
 | EP3 — CRUD Inicial | ✅ |
 | EP4 — CRUD Completo| ✅ |
-| EP5 — Autenticação | ⏳ |
+| EP5 — Autenticação | ✅ |
 | Final              | ⏳ |

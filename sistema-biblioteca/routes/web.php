@@ -6,11 +6,12 @@ $method     = strtolower($segments[1] ?? 'index');
 $param      = $segments[2] ?? null;
 
 $routes = [
-    'HomeController'      => ['index'],
-    'LivroController'     => ['index','criar','salvar','editar','atualizar','deletar','show'],
-    'AutorController'     => ['index','criar','salvar','editar','atualizar','deletar'],
-    'CategoriaController' => ['index','criar','salvar','editar','atualizar','deletar'],
-    'AuthController'      => ['login','autenticar','logout'],
+    'HomeController'     => ['index'],
+    'LivroController'    => ['index','criar','salvar','editar','atualizar','deletar','show'],
+    'AutorController'    => ['index','criar','salvar','editar','atualizar','deletar'],
+    'CategoriaController'=> ['index','criar','salvar','editar','atualizar','deletar'],
+    'AuthController'     => ['login','autenticar','logout'],
+    'UsuarioController'  => ['index','criar','salvar','editar','atualizar','deletar','perfil','alterarSenha'],
 ];
 
 if (!isset($routes[$controller]) || !in_array($method, $routes[$controller])) {

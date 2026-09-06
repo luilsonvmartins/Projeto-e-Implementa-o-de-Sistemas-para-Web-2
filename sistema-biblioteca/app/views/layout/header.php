@@ -71,8 +71,13 @@
         <li><a href="<?= url('livro/index') ?>">Acervo</a></li>
         <li><a href="<?= url('autor/index') ?>">Autores</a></li>
         <li><a href="<?= url('categoria/index') ?>">Categorias</a></li>
+        <?php if (isAdmin()): ?><li><a href="<?= url('usuario/index') ?>">Usuários</a></li><?php endif; ?>
     </ul>
-    <div class="navbar-user">👤 <?= e($_SESSION['usuario_nome'] ?? '') ?> <a href="<?= url('auth/logout') ?>">Sair</a></div>
+    <div class="navbar-user">
+        <a href="<?= url('usuario/perfil') ?>" style="color:#c8ddf0;">👤 <?= e($_SESSION['usuario_nome'] ?? '') ?></a>
+        <?php if (isAdmin()): ?><span style="background:#2E6DA4;padding:.15rem .5rem;border-radius:10px;font-size:.72rem;color:#fff">admin</span><?php endif; ?>
+        <a href="<?= url('auth/logout') ?>">Sair</a>
+    </div>
     <?php endif; ?>
 </nav>
 

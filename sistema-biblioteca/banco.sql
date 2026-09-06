@@ -83,4 +83,17 @@ INSERT IGNORE INTO livro_autor VALUES (1,1),(2,2),(3,3);
 
 INSERT IGNORE INTO usuarios (nome,email,senha,perfil) VALUES
   ('Administrador','admin@biblioteca.com',
-   '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','admin');
+   '$2y$10$iT2cQn3tRtE92vTtOgRiXubetxIBiE/xKK6eFKDBvSvxHLV16UDVm','admin');
+
+-- ============================================================
+-- EP5 — Atualizar senha do admin para hash bcrypt real
+-- Senha: admin123
+-- ============================================================
+UPDATE usuarios
+SET senha = '$2y$10$iT2cQn3tRtE92vTtOgRiXubetxIBiE/xKK6eFKDBvSvxHLV16UDVm'
+WHERE email = 'admin@biblioteca.com';
+
+-- Usuário leitor para testes (senha: leitor123)
+INSERT IGNORE INTO usuarios (nome, email, senha, perfil) VALUES
+  ('Leitor Teste', 'leitor@biblioteca.com',
+   '$2y$10$6fsFS5t79G.ee4I9xgOCE.9Mspis8qsIEy84zpT8jSvIk5/oEXAKa', 'leitor');
