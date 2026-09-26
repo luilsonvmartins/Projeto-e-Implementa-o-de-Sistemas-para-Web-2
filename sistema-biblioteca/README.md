@@ -4,6 +4,11 @@
 **Polo:** Sobradinho — BA
 **Repositório:** https://github.com/luilsonvmartins/Projeto-e-Implementa-o-de-Sistemas-para-Web-2
 
+**🚀 Deploy do Projeto**
+O sistema de biblioteca foi hospedado e está disponível para testes online.
+Acesse a aplicação aqui: **🔗 Visualizar Sistema de Biblioteca **
+Vídeo de demonstração: **🔗 Vídeo de Demonstração do Sistema **
+
 ## Como rodar
 1. Extraia dentro de `C:\xampp\htdocs\sistema-biblioteca`
 2. Inicie Apache e MySQL no XAMPP
@@ -20,4 +25,4 @@
 | EP3 — CRUD Inicial | ✅ |
 | EP4 — CRUD Completo| ✅ |
 | EP5 — Autenticação | ✅ |
-| Final              | ⏳ |
+| Final              | ✅ |
