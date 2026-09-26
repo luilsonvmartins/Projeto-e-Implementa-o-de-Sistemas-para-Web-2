@@ -1,12 +1,17 @@
 # 📚 Sistema de Biblioteca
 
 **Equipe:** Hezron Daniel M C Canturil | Leandro Caitano dos Santos | Luilson Vieira Martins
+
 **Polo:** Sobradinho — BA
+
 **Repositório:** https://github.com/luilsonvmartins/Projeto-e-Implementa-o-de-Sistemas-para-Web-2
 
-**🚀 Deploy do Projeto**
+# 🚀 Deploy do Projeto
+
 O sistema de biblioteca foi hospedado e está disponível para testes online.
-Acesse a aplicação aqui: **🔗 Visualizar Sistema de Biblioteca **
+
+Acesse a aplicação aqui: **🔗 Visualizar Sistema de Biblioteca  **
+
 Vídeo de demonstração: **🔗 Vídeo de Demonstração do Sistema **
 
 ## Como rodar
