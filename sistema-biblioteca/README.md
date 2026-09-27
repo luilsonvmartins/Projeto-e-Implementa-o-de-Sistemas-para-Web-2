@@ -10,9 +10,9 @@
 
 O sistema de biblioteca foi hospedado e está disponível para testes online.
 
-Acesse a aplicação aqui: **🔗 Visualizar Sistema de Biblioteca  **
+Acesse a aplicação aqui: **🔗 [Visualizar Sistema de Biblioteca](https://adsunivasfsistemabiblioteca.infinityfree.io/)**
 
-Vídeo de demonstração: **🔗 Vídeo de Demonstração do Sistema **
+Vídeo de demonstração: **🔗 [Vídeo de Demonstração do Sistema](https://youtu.be/t_T53i_APwI?si=60XHhkiY-c0jveaq)**
 
 ## Como rodar
 1. Extraia dentro de `C:\xampp\htdocs\sistema-biblioteca`
